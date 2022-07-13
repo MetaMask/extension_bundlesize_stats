@@ -1,0 +1,116 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
+    ></script>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div>
+      <canvas id="myChart"></canvas>
+    </div>
+    <script>
+      const JSON_FILENAME_REGEX = /bundle_size_stats-([a-z0-9_]*).json/;
+      const basePath = window.location.href.substr(
+        0,
+        window.location.href.length - "background.html".length - 1
+      );
+
+      async function renderChart(jsonFileNames) {
+        const labels = jsonFileNames.map((name) => name.commit);
+        const bundleSizeData = [];
+        for (let i = 0; i < jsonFileNames.length; i++) {
+          const fileContent = await $.getJSON(
+            `${basePath}/stats/${jsonFileNames[i].filename}`
+          );
+          bundleSizeData.push({
+            timestamp: fileContent.timestamp,
+            x: jsonFileNames[i].commit,
+            y: fileContent.background,
+          });
+        }
+        const data = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Background bundle size in bytes",
+              data: bundleSizeData,
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(255, 159, 64, 0.2)",
+                "rgba(255, 205, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+              ],
+              borderColor: [
+                "rgb(255, 99, 132)",
+                "rgb(255, 159, 64)",
+                "rgb(255, 205, 86)",
+                "rgb(75, 192, 192)",
+                "rgb(54, 162, 235)",
+                "rgb(153, 102, 255)",
+                "rgb(201, 203, 207)",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        };
+
+        const config = {
+          type: "bar",
+          data: data,
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItems) {
+                    return `Bundle Size: ${
+                      tooltipItems.formattedValue
+                    }       Time: ${new Date(
+                      tooltipItems.raw.timestamp
+                    ).toLocaleString()}`;
+                  },
+                },
+              },
+            },
+          },
+        };
+
+        const myChart = new Chart(document.getElementById("myChart"), config);
+      }
+
+      function readDirectory() {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", `${basePath}/stats/fileList.txt`, true);
+        rawFile.onreadystatechange = function (state) {
+          if (rawFile.readyState === XMLHttpRequest.DONE) {
+            const directoryContent = rawFile.response;
+            const jsonFileNames = directoryContent
+              .split(" ")
+              .filter((name) => !!name)
+              .map((name) => {
+                const newName = name.trim();
+                return {
+                  filename: newName,
+                  commit: JSON_FILENAME_REGEX.exec(newName)[1],
+                };
+              });
+            console.log(jsonFileNames);
+            renderChart(jsonFileNames);
+          }
+        };
+        rawFile.send();
+      }
+      readDirectory();
+    </script>
+  </body>
+</html>
