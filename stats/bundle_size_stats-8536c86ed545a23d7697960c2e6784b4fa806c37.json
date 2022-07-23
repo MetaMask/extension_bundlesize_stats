@@ -1,0 +1,178 @@
+{
+  "background": {
+    "name": "background",
+    "size": 13862125,
+    "fileList": [
+      {
+        "name": "background-0.js",
+        "size": 317042
+      },
+      {
+        "name": "background-1.js",
+        "size": 871025
+      },
+      {
+        "name": "background-2.js",
+        "size": 596852
+      },
+      {
+        "name": "background-3.js",
+        "size": 597832
+      },
+      {
+        "name": "background-4.js",
+        "size": 605085
+      },
+      {
+        "name": "background-5.js",
+        "size": 677845
+      },
+      {
+        "name": "background-6.js",
+        "size": 628978
+      },
+      {
+        "name": "background-7.js",
+        "size": 120898
+      },
+      {
+        "name": "common-0.js",
+        "size": 1676630
+      },
+      {
+        "name": "common-1.js",
+        "size": 1742084
+      },
+      {
+        "name": "common-2.js",
+        "size": 1198225
+      },
+      {
+        "name": "common-3.js",
+        "size": 738327
+      },
+      {
+        "name": "common-4.js",
+        "size": 1011919
+      },
+      {
+        "name": "common-5.js",
+        "size": 717081
+      },
+      {
+        "name": "common-6.js",
+        "size": 709985
+      },
+      {
+        "name": "common-7.js",
+        "size": 663358
+      },
+      {
+        "name": "common-8.js",
+        "size": 250252
+      },
+      {
+        "name": "globalthis.js",
+        "size": 9017
+      },
+      {
+        "name": "lockdown-more.js",
+        "size": 3450
+      },
+      {
+        "name": "policy-load.js",
+        "size": 138992
+      },
+      {
+        "name": "runtime-lavamoat.js",
+        "size": 398337
+      },
+      {
+        "name": "sentry-install.js",
+        "size": 188911
+      }
+    ]
+  },
+  "ui": {
+    "name": "ui",
+    "size": 16892163,
+    "fileList": [
+      {
+        "name": "common-0.js",
+        "size": 1676630
+      },
+      {
+        "name": "common-1.js",
+        "size": 1742084
+      },
+      {
+        "name": "common-2.js",
+        "size": 1198225
+      },
+      {
+        "name": "common-3.js",
+        "size": 738327
+      },
+      {
+        "name": "common-4.js",
+        "size": 1011919
+      },
+      {
+        "name": "common-5.js",
+        "size": 717081
+      },
+      {
+        "name": "common-6.js",
+        "size": 709985
+      },
+      {
+        "name": "common-7.js",
+        "size": 663358
+      },
+      {
+        "name": "common-8.js",
+        "size": 250252
+      },
+      {
+        "name": "ui-0.js",
+        "size": 1024341
+      },
+      {
+        "name": "ui-1.js",
+        "size": 1113734
+      },
+      {
+        "name": "ui-2.js",
+        "size": 2044313
+      },
+      {
+        "name": "ui-3.js",
+        "size": 495745
+      },
+      {
+        "name": "ui-4.js",
+        "size": 1254601
+      },
+      {
+        "name": "ui-5.js",
+        "size": 594272
+      },
+      {
+        "name": "ui-6.js",
+        "size": 497052
+      },
+      {
+        "name": "ui-7.js",
+        "size": 473624
+      },
+      {
+        "name": "ui-8.js",
+        "size": 579761
+      },
+      {
+        "name": "ui-9.js",
+        "size": 106859
+      }
+    ]
+  }
+}
