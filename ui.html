@@ -95,12 +95,15 @@
           if (rawFile.readyState === XMLHttpRequest.DONE) {
             const directoryContent = rawFile.response;
             const jsonFileNames = directoryContent
-              .split("\n")
+              .split(" ")
               .filter((name) => !!name)
-              .map((name) => ({
-                filename: name,
-                commit: JSON_FILENAME_REGEX.exec(name)[1],
-              }));
+              .map((name) => {
+                const newName = name.trim();
+                return {
+                  filename: newName,
+                  commit: JSON_FILENAME_REGEX.exec(newName)[1],
+                };
+              });
             console.log(jsonFileNames);
             renderChart(jsonFileNames);
           }
