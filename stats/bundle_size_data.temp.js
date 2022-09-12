@@ -1,1 +1,1 @@
-const data = [
+const data = {
