@@ -1,6 +1,7 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/stats/bundle_size_data.js"></script>
     <script
       type="text/javascript"
       src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
@@ -18,19 +19,7 @@
         window.location.href.length - "background.html".length - 1
       );
 
-      async function renderChart(jsonFileNames) {
-        const labels = jsonFileNames.map((name) => name.commit);
-        const bundleSizeData = [];
-        for (let i = 0; i < jsonFileNames.length; i++) {
-          const fileContent = await $.getJSON(
-            `${basePath}/stats/${jsonFileNames[i].filename}`
-          );
-          bundleSizeData.push({
-            timestamp: fileContent.timestamp,
-            x: jsonFileNames[i].commit,
-            y: fileContent.background,
-          });
-        }
+      async function renderChart(labels, bundleSizeData) {
         const data = {
           labels: labels,
           datasets: [
@@ -91,7 +80,7 @@
       function readDirectory() {
         var rawFile = new XMLHttpRequest();
         rawFile.open("GET", `${basePath}/stats/fileList.txt`, true);
-        rawFile.onreadystatechange = function (state) {
+        rawFile.onreadystatechange = async function (state) {
           if (rawFile.readyState === XMLHttpRequest.DONE) {
             const directoryContent = rawFile.response;
             const jsonFileNames = directoryContent
@@ -104,8 +93,34 @@
                   commit: JSON_FILENAME_REGEX.exec(newName)[1],
                 };
               });
-            console.log(jsonFileNames);
-            renderChart(jsonFileNames);
+            const bundleSizeData = [];
+            for (let i = 0; i < jsonFileNames.length; i++) {
+              const fileContent = await $.getJSON(
+                `${basePath}/stats/${jsonFileNames[i].filename}`
+              );
+              bundleSizeData.push({
+                timestamp: fileContent.timestamp,
+                x: jsonFileNames[i].commit,
+                y: fileContent.background,
+              });
+            }
+            const newData = Object.entries(data || {})
+              .map(([key, value]) => ({
+                ...value,
+                commit: key,
+              }))
+              .sort((a, b) => a.timestamp - b.timestamp);
+            newData.forEach((d) => {
+              bundleSizeData.push({
+                timestamp: d.timestamp,
+                x: d.commit,
+                y: d.background + d.common,
+              });
+            });
+            const labels = [...jsonFileNames, ...newData].map(
+              (name) => name.commit
+            );
+            renderChart(labels, bundleSizeData);
           }
         };
         rawFile.send();
