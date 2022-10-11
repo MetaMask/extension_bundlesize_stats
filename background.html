@@ -118,10 +118,13 @@
         myDataChart.data.datasets[0].data = bundleSizeData;
         myDataChart.update();
       }
-
+      const basePath = document.location.pathname
+        .split("/")
+        .slice(0, -1)
+        .join("/");
       // random timestamp query param to prevent file from being cached
       loadJS(
-        `/stats/bundle_size_data.js?timestamp=${Date.now()}`,
+        `${basePath}/stats/bundle_size_data.js?timestamp=${Date.now()}`,
         readBundleSizeData,
         document.head
       );
