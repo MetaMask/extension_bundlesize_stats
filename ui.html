@@ -9,28 +9,23 @@
   </head>
   <body>
     <div>
+      <div style="text-align: center">
+        <label for="commits">Commits:</label>
+        <select name="commits" id="commits" onchange="updateChart()">
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+          <option value="0" selected>ALL</option>
+        </select>
+      </div>
       <canvas id="myChart"></canvas>
     </div>
     <script>
-      const JSON_FILENAME_REGEX = /bundle_size_stats-([a-z0-9_]*).json/;
-      const basePath = window.location.href.substr(
-        0,
-        window.location.href.length - "ui.html".length - 1
-      );
+      let allBundleSizeData;
+      let myDataChart;
 
-      async function renderChart(jsonFileNames) {
-        const labels = jsonFileNames.map((name) => name.commit);
-        const bundleSizeData = [];
-        for (let i = 0; i < jsonFileNames.length; i++) {
-          const fileContent = await $.getJSON(
-            `${basePath}/stats/${jsonFileNames[i].filename}`
-          );
-          bundleSizeData.push({
-            timestamp: fileContent.timestamp,
-            x: jsonFileNames[i].commit,
-            y: fileContent.ui,
-          });
-        }
+      async function renderChart(labels, bundleSizeData) {
         const data = {
           labels: labels,
           datasets: [
@@ -85,32 +80,46 @@
           },
         };
 
-        const myChart = new Chart(document.getElementById("myChart"), config);
+        myDataChart = new Chart(document.getElementById("myChart"), config);
       }
 
-      function readDirectory() {
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", `${basePath}/stats/fileList.txt`, true);
-        rawFile.onreadystatechange = function (state) {
-          if (rawFile.readyState === XMLHttpRequest.DONE) {
-            const directoryContent = rawFile.response;
-            const jsonFileNames = directoryContent
-              .split(" ")
-              .filter((name) => !!name)
-              .map((name) => {
-                const newName = name.trim();
-                return {
-                  filename: newName,
-                  commit: JSON_FILENAME_REGEX.exec(newName)[1],
-                };
-              });
-            console.log(jsonFileNames);
-            renderChart(jsonFileNames);
-          }
-        };
-        rawFile.send();
+      function loadJS(url, implementationCode, location) {
+        const scriptTag = document.createElement("script");
+        scriptTag.src = url;
+        scriptTag.onload = implementationCode;
+        location.appendChild(scriptTag);
       }
-      readDirectory();
+
+      function readBundleSizeData() {
+        const size = parseInt(document.getElementById("commits").value);
+        allBundleSizeData = Object.entries(data || {})
+          .map(([commit, d]) => ({
+            timestamp: d.timestamp,
+            x: commit,
+            y: d.ui,
+          }))
+          .sort((a, b) => a.timestamp - b.timestamp);
+        const bundleSizeData =
+          size > 0
+            ? allBundleSizeData.slice(allBundleSizeData.length - size)
+            : allBundleSizeData;
+        const labels = bundleSizeData.map((name) => name.x);
+        renderChart(labels, bundleSizeData);
+      }
+
+      function updateChart() {
+        const size = parseInt(document.getElementById("commits").value);
+        const bundleSizeData =
+          size > 0
+            ? allBundleSizeData.slice(allBundleSizeData.length - size)
+            : allBundleSizeData;
+        const labels = bundleSizeData.map((name) => name.x);
+        myDataChart.data.labels = labels;
+        myDataChart.data.datasets[0].data = bundleSizeData;
+        myDataChart.update();
+      }
+      // random timestamp query param to prevent file from being cached
+      loadJS(`/stats/bundle_size_data.js?timestamp=${Date.now()}`, readBundleSizeData, document.head);
     </script>
   </body>
 </html>
