@@ -56,6 +56,17 @@
           type: "bar",
           data: data,
           options: {
+            onClick: (_, [raw]) => {
+              try {
+                const commit = raw.element.$context.raw.x;
+                window.open(
+                  `https://github.com/MetaMask/metamask-extension/commit/${commit}`,
+                  "_blank"
+                );
+              } catch (error) {
+                console.error(error);
+              }
+            },
             scales: {
               x: {
                 stacked: true,
