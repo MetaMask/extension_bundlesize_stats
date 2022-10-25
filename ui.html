@@ -59,6 +59,15 @@
           type: "bar",
           data: data,
           options: {
+            onClick: (_, [raw]) => {
+              const commit = raw?.element?.$context?.raw?.x;
+              if (commit) {
+                window.open(
+                  `https://github.com/MetaMask/metamask-extension/commit/${commit}`,
+                  "_blank"
+                );
+              }
+            },
             scales: {
               y: {
                 beginAtZero: true,
