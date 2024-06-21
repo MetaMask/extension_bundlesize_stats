@@ -28690,3 +28690,10 @@ const data = {
   "common": 6590726,
   "timestamp": 1718975884504
 }, 
+ '377788243618c1cd2116b907542e006d2d2edbad': 
+{
+  "background": 3546564,
+  "ui": 7053161,
+  "common": 6590888,
+  "timestamp": 1718977356239
+}, 
