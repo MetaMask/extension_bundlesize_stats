@@ -96,11 +96,13 @@
         myDataChart = new Chart(document.getElementById("myChart"), config);
       }
 
-      function loadJS(url, implementationCode, location) {
-        const scriptTag = document.createElement("script");
-        scriptTag.src = url;
-        scriptTag.onload = implementationCode;
-        location.appendChild(scriptTag);
+      function loadJSON(url, implementationCode) {
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            window.data = data;
+            implementationCode();
+          });
       }
 
       function readBundleSizeData() {
@@ -192,7 +194,7 @@
         const size = parseInt(document.getElementById("commits").value);
         if (size > 0) {
           myDataChart.data.labels = labels.slice(labels.length - size);
-          myDataChart.data.datasets = datasets.map((d) => ({
+          myDataChart.data.datasets = datasets.map(d => ({
             ...d,
             data: d.data.slice(d.data.length - size),
           }));
@@ -206,11 +208,11 @@
         .split("/")
         .slice(0, -1)
         .join("/");
+
       // random timestamp query param to prevent file from being cached
-      loadJS(
-        `${basePath}/stats/bundle_size_data.js?timestamp=${Date.now()}`,
-        readBundleSizeData,
-        document.head
+      loadJSON(
+        `${basePath}/stats/bundle_size_data.json?timestamp=${Date.now()}`,
+        readBundleSizeData
       );
     </script>
   </body>

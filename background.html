@@ -92,11 +92,13 @@
         myDataChart = new Chart(document.getElementById("myChart"), config);
       }
 
-      function loadJS(url, implementationCode, location) {
-        const scriptTag = document.createElement("script");
-        scriptTag.src = url;
-        scriptTag.onload = implementationCode;
-        location.appendChild(scriptTag);
+      function loadJSON(url, implementationCode) {
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            window.data = data;
+            implementationCode();
+          });
       }
 
       function readBundleSizeData() {
@@ -112,7 +114,7 @@
           size > 0
             ? allBundleSizeData.slice(allBundleSizeData.length - size)
             : allBundleSizeData;
-        const labels = bundleSizeData.map((name) => name.x);
+        const labels = bundleSizeData.map(name => name.x);
         renderChart(labels, bundleSizeData);
       }
 
@@ -122,7 +124,7 @@
           size > 0
             ? allBundleSizeData.slice(allBundleSizeData.length - size)
             : allBundleSizeData;
-        const labels = bundleSizeData.map((name) => name.x);
+        const labels = bundleSizeData.map(name => name.x);
         myDataChart.data.labels = labels;
         myDataChart.data.datasets[0].data = bundleSizeData;
         myDataChart.update();
@@ -131,11 +133,11 @@
         .split("/")
         .slice(0, -1)
         .join("/");
+
       // random timestamp query param to prevent file from being cached
-      loadJS(
-        `${basePath}/stats/bundle_size_data.js?timestamp=${Date.now()}`,
-        readBundleSizeData,
-        document.head
+      loadJSON(
+        `${basePath}/stats/bundle_size_data.json?timestamp=${Date.now()}`,
+        readBundleSizeData
       );
     </script>
   </body>
