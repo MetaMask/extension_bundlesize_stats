@@ -70961,5 +70961,14 @@
     "contentScripts": 2002436,
     "zip": 23899512,
     "timestamp": 1788892607840
+  },
+  "027bc0c12418feac3a193bb8c362150fcaefcc97": {
+    "background": 15285149,
+    "ui": 19482386,
+    "common": 0,
+    "other": 2073175,
+    "contentScripts": 2002436,
+    "zip": 23898808,
+    "timestamp": 1788895869245
   }
 }
