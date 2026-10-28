@@ -76349,5 +76349,15 @@
     "unzipped": 83627193,
     "zip": 25204361,
     "timestamp": 1793203017739
+  },
+  "237f9e4c6401bec0d6349aa82257e81f28d976ae": {
+    "background": 16150683,
+    "ui": 20197583,
+    "common": 0,
+    "other": 4657648,
+    "contentScripts": 3391047,
+    "unzipped": 83626653,
+    "zip": 25204282,
+    "timestamp": 1793203222031
   }
 }
